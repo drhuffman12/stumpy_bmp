@@ -88,7 +88,7 @@ module StumpyBMP
       # raise "Not a BMP file" if file_bytes[FILE_IDENT_HEADER_RANGE].map(&.chr).join != FILE_IDENT_HEADER
       @errors[:file_ident_header_ords] = "Not a BMP file" if file_ident_header_range_text != FILE_IDENT_HEADER
 
-      @errors[:bits] = "Un-supported bit-depth! (bits: #{bits}" if ![24, 32].includes?(bits)
+      @errors[:bits] = "Un-supported bit-depth! (bits: #{bits}; supported: 24 at 8bits per bgr, 32 at 8bits per bgra)" if ![24, 32].includes?(bits)
 
       # TODO: more validations
 
