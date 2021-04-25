@@ -1,10 +1,11 @@
 module StumpyBMP
   class BMP
     getter width : Int32, height : Int32
+    getter file_name : String
     getter file_data : FileData
     getter canvas : StumpyCore::Canvas
 
-    def initialize(@width = 0, @height = 0, file_name = "")
+    def initialize(@width = 0, @height = 0, @file_name = "")
       @file_data = FileData.new(file_name)
       @canvas = StumpyCore::Canvas.new(@width, @height)
     end
@@ -15,11 +16,10 @@ module StumpyBMP
       file_data_to_canvas
     end
 
-    def write
+    def write(canvas : Canvas, bits_per_pixel : UInt8 = 8, include_alpha : Bool = false)
       raise "TODO"
-      
-      # TODO: Probably to the following in reverse:
 
+      # TODO: Probably to the following in reverse/inverted:
       # @file_data.extract_data
       # @file_data.validate!
       # file_data_to_canvas
