@@ -40,6 +40,7 @@ module StumpyBMP
       # row_size = @file_data.width
 
       bytes_per_pixel = (@file_data.bits / 8) # .to_i32
+
       row_size_with_padding = ((bytes_per_pixel * @file_data.width / 4.0).ceil * 4.0).to_i32
       row_size_with_no_padding = (bytes_per_pixel * @file_data.width).to_i32
       padding = row_size_with_padding - row_size_with_no_padding
@@ -76,17 +77,37 @@ module StumpyBMP
         @file_data.width.times do |x|
           pixel_color_data = pixel_byte_sets[x]
           p! [x, pixel_color_data]
-          # ri,gi,bi = pixel_color_data
-          bi, gi, ri, ai = pixel_color_data
-          a = @file_data.file_bytes[ai]
-          r = @file_data.file_bytes[ri]
-          g = @file_data.file_bytes[gi]
-          b = @file_data.file_bytes[bi]
 
-          puts; p! [pixel_color_data, [x, y], [ai, ri, gi, bi], {"arbg order" => [a, r, g, b]},
-                    {"encoded order" => [b, g, r, a]}]
+          case
+          when @file_data.bits == 32
+            # ri,gi,bi = pixel_color_data
+            bi, gi, ri, ai = pixel_color_data
+            a = @file_data.file_bytes[ai]
+            r = @file_data.file_bytes[ri]
+            g = @file_data.file_bytes[gi]
+            b = @file_data.file_bytes[bi]
 
-          pixel_to_canvas(x.to_i32, y.to_i32, a, r, g, b)
+            puts; p! [pixel_color_data, [x, y], [ai, ri, gi, bi], {"arbg order" => [a, r, g, b]},
+                      {"encoded order" => [b, g, r, a]}]
+
+            # pixel_to_canvas_argb(x.to_i32, y.to_i32, a, r, g, b)
+            canvas.safe_set(x.to_i32, y.to_i32, StumpyCore::RGBA.from_rgba(r, g, b, a))
+          when @file_data.bits == 24
+            # ri,gi,bi = pixel_color_data
+            bi, gi, ri = pixel_color_data
+            # a = @file_data.file_bytes[ai]
+            r = @file_data.file_bytes[ri]
+            g = @file_data.file_bytes[gi]
+            b = @file_data.file_bytes[bi]
+
+            puts; p! [pixel_color_data, [x, y], [ri, gi, bi], {"rbg order" => [r, g, b]},
+                      {"encoded order" => [b, g, r]}]
+
+            # pixel_to_canvas_rgb(x.to_i32, y.to_i32, r, g, b)
+            canvas.safe_set(x.to_i32, y.to_i32, StumpyCore::RGBA.from_rgb8(r, g, b))
+          else
+            #
+          end
         end
 
         #   row_range.each_slice(BYTES_PER_PIXEL).with_index do |pixel_color_data,x|
