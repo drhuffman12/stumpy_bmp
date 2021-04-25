@@ -15,6 +15,16 @@ module StumpyBMP
       file_data_to_canvas
     end
 
+    def write
+      raise "TODO"
+      
+      # TODO: Probably to the following in reverse:
+
+      # @file_data.extract_data
+      # @file_data.validate!
+      # file_data_to_canvas
+    end
+
     private def file_data_to_canvas
       @canvas = StumpyCore::Canvas.new(@file_data.width.to_i32, @file_data.height.to_i32)
 
