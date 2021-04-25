@@ -25,15 +25,11 @@ Spectator.describe StumpyBMP::FileData do
 
       context "errors include" do
         it "file_name" do
-          puts; p! file_data.valid
-          puts; p! file_data.errors
           expect(file_data.errors.keys.to_a).to contain(:file_name)
           expect(file_data.errors[:file_name]).to eq("Param file_name is missing!")
         end
 
         it "file_ident_header_ords" do
-          puts; p! file_data.valid
-          puts; p! file_data.errors
           expect(file_data.errors.keys.to_a).to contain(:file_ident_header_ords)
           expect(file_data.errors[:file_ident_header_ords]).to eq("Not a BMP file")
         end

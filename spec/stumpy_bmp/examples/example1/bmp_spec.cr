@@ -1,9 +1,9 @@
 require "./../../../spec_helper"
 
 Spectator.describe StumpyBMP::BMP do
-  context "reads BMP file" do
+  context "#read" do
     context "spec/stumpy_bmp/examples/example1/image.bmp" do
-      let(bmp) { StumpyBMP::BMP.new(file_name: "spec/stumpy_bmp/examples/example1/image.bmp") } # .read("spec/stumpy_bmp/examples/example1/image.bmp") }
+      let(bmp) { StumpyBMP::BMP.new(file_name: "spec/stumpy_bmp/examples/example1/image.bmp") }
       before_each { bmp.read }
 
       # NOTE: The rows are encoded bottom to top and left to right

@@ -117,8 +117,6 @@ Spectator.describe StumpyBMP::FileData do
 
       context "errors do NOT include" do
         it "file_name" do
-          puts; p! file_data.valid
-          puts; p! file_data.errors
           expect(file_data.errors.keys.to_a).not_to contain(:file_name)
         end
       end
@@ -126,8 +124,6 @@ Spectator.describe StumpyBMP::FileData do
       context "errors do include" do
         # because at initialization, we have not *yet* read the file data
         it "file_ident_header_ords" do
-          puts; p! file_data.valid
-          puts; p! file_data.errors
           expect(file_data.errors.keys.to_a).to contain(:file_ident_header_ords)
           expect(file_data.errors[:file_ident_header_ords]).to eq("Not a BMP file")
         end
@@ -195,12 +191,10 @@ Spectator.describe StumpyBMP::FileData do
             let(value_expected) { file_ident_header_ords_expected }
 
             it "class" do
-              puts; p! file_data.file_ident_header_ords.class
               expect(variable_set.class).to eq(Array(UInt8))
             end
 
             it "value" do
-              puts; p! file_data.file_ident_header_ords
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -210,12 +204,10 @@ Spectator.describe StumpyBMP::FileData do
             let(value_expected) { file_size_expected }
 
             it "class" do
-              puts; p! file_data.file_size.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.file_size
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -224,12 +216,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.rs1 }
             let(value_expected) { rs1_expected }
             it "class" do
-              puts; p! file_data.rs1.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.rs1
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -238,12 +228,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.rs2 }
             let(value_expected) { rs2_expected }
             it "class" do
-              puts; p! file_data.rs2.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.rs2
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -252,12 +240,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.offset }
             let(value_expected) { offset_expected }
             it "class" do
-              puts; p! file_data.offset.class
               expect(file_data.offset.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! variable_set
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -266,12 +252,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.header_size }
             let(value_expected) { header_size_expected }
             it "class" do
-              puts; p! file_data.header_size.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.header_size
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -280,12 +264,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.width }
             let(value_expected) { width_expected }
             it "class" do
-              puts; p! file_data.width.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.width
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -294,12 +276,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.height }
             let(value_expected) { height_expected }
             it "class" do
-              puts; p! file_data.height.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.height
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -308,12 +288,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.color_planes }
             let(value_expected) { color_planes_expected }
             it "class" do
-              puts; p! file_data.color_planes.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.color_planes
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -322,12 +300,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.bits }
             let(value_expected) { bits_expected }
             it "class" do
-              puts; p! file_data.bits.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.bits
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -336,12 +312,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.compression }
             let(value_expected) { compression_expected }
             it "class" do
-              puts; p! file_data.compression.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.compression
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -350,12 +324,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.image_size }
             let(value_expected) { image_size_expected }
             it "class" do
-              puts; p! file_data.image_size.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.image_size
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -364,12 +336,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.res_x }
             let(value_expected) { res_x_expected }
             it "class" do
-              puts; p! file_data.res_x.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.res_x
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -378,12 +348,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.res_y }
             let(value_expected) { res_y_expected }
             it "class" do
-              puts; p! file_data.res_y.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.res_y
               expect(variable_set).to eq(value_expected)
             end
           end
@@ -392,12 +360,10 @@ Spectator.describe StumpyBMP::FileData do
             let(variable_set) { file_data.color_numbers }
             let(value_expected) { color_numbers_expected }
             it "class" do
-              puts; p! file_data.color_numbers.class
               expect(variable_set.class).to eq(UInt32)
             end
 
             it "value" do
-              puts; p! file_data.color_numbers
               expect(variable_set).to eq(value_expected)
             end
           end
