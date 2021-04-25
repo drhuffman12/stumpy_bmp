@@ -2,11 +2,11 @@ module StumpyBMP
   class BMP
     getter width : Int32, height : Int32
     getter file_data : FileData
-    getter canvas : Canvas
+    getter canvas : StumpyCore::Canvas
 
     def initialize(@width = 0, @height = 0, file_name = "")
       @file_data = FileData.new(file_name)
-      @canvas = Canvas.new(@width, @height)
+      @canvas = StumpyCore::Canvas.new(@width, @height)
     end
 
     def read
@@ -16,7 +16,7 @@ module StumpyBMP
     end
 
     private def file_data_to_canvas
-      @canvas = Canvas.new(@file_data.width.to_i32, @file_data.height.to_i32)
+      @canvas = StumpyCore::Canvas.new(@file_data.width.to_i32, @file_data.height.to_i32)
 
       bytes_per_pixel = (@file_data.bits / 8)
 
