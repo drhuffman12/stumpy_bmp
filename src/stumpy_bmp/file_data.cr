@@ -50,12 +50,12 @@ module StumpyBMP
       validate
     end
 
-    def extract_data
-      extract_bytes
-      extract_header_data
+    def read_data
+      read_bytes
+      read_header_data
     end
 
-    def extract_bytes
+    def read_bytes
       @file_bytes = [] of UInt8
 
       unless @file_name.empty?
@@ -70,7 +70,7 @@ module StumpyBMP
       @file_bytes
     end
 
-    def extract_header_data
+    def read_header_data
       unless @file_name.empty? || @file_bytes.empty?
         @file_ident_header_ords = file_bytes[FILE_IDENT_HEADER_RANGE]
         @file_size = Utils.long_to_int(file_bytes[FILE_SIZE_RANGE])
@@ -114,6 +114,22 @@ module StumpyBMP
 
     def validate!
       raise @errors.to_json if !valid?
+    end
+
+    def write_data(canvas)
+      # See also: https://github.com/edin/raytracer/blob/master/ruby/Image.rb and related code
+    end
+
+    def write_data_bytes
+      # TODO
+    end
+
+    def write_data_header
+      # TODO
+    end
+
+    def write_data_image
+      # TODO
     end
   end
 end

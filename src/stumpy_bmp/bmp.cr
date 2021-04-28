@@ -11,7 +11,7 @@ module StumpyBMP
     end
 
     def read
-      @file_data.extract_data
+      @file_data.read_data
       @file_data.validate!
       file_data_to_canvas
     end
@@ -20,7 +20,7 @@ module StumpyBMP
       raise "TODO"
 
       # TODO: Probably to the following in reverse/inverted:
-      # @file_data.extract_data
+      # @file_data.read_data
       # @file_data.validate!
       # file_data_to_canvas
     end

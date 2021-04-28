@@ -93,59 +93,59 @@ Spectator.describe StumpyBMP::FileData do
       end
     end
 
-    describe "#extract_data" do
+    describe "#read_data" do
       before_each do
-        allow(file_data).to receive(:extract_bytes).and_return(nil)
-        allow(file_data).to receive(:extract_header_data).and_return(nil)
+        allow(file_data).to receive(:read_bytes).and_return(nil)
+        allow(file_data).to receive(:read_header_data).and_return(nil)
       end
 
       context "calls" do
-        pending "extract_bytes" do
-          # allow(file_data).to receive(:extract_bytes).and_return(nil)
-          # allow(file_data).to receive(:extract_header_data).and_return(nil)
+        pending "read_bytes" do
+          # allow(file_data).to receive(:read_bytes).and_return(nil)
+          # allow(file_data).to receive(:read_header_data).and_return(nil)
 
-          expect(file_data).to receive(:extract_bytes).and_return(nil)
-          file_data.extract_data
+          expect(file_data).to receive(:read_bytes).and_return(nil)
+          file_data.read_data
         end
 
-        pending "extract_header_data" do
-          # allow(file_data).to receive(:extract_bytes).and_return(nil)
-          # allow(file_data).to receive(:extract_header_data).and_return(nil)
+        pending "read_header_data" do
+          # allow(file_data).to receive(:read_bytes).and_return(nil)
+          # allow(file_data).to receive(:read_header_data).and_return(nil)
 
-          expect(file_data).to receive(:extract_header_data)
-          file_data.extract_data
+          expect(file_data).to receive(:read_header_data)
+          file_data.read_data
         end
       end
     end
 
-    describe "#extract_bytes" do
+    describe "#read_bytes" do
       context "does call" do
         pending "File.open" do
           expect(file_data.file_name.empty?).to be_false
           expect(File).to receive(:open).with(file_name)
-          file_data.extract_bytes
+          file_data.read_bytes
         end
       end
 
       it "sets @file_bytes with expected (mock) data" do
         expect(file_data.file_bytes).to eq(Array(UInt8).new)
-        file_data.extract_bytes
+        file_data.read_bytes
         expect(file_data.file_bytes).to eq(file_bytes_expected)
       end
 
       it "returns expected (mock) data" do
-        expect(file_data.extract_bytes).to eq(file_bytes_expected)
+        expect(file_data.read_bytes).to eq(file_bytes_expected)
       end
     end
 
-    describe "#extract_header_data" do
+    describe "#read_header_data" do
       before_each do
-        file_data.extract_bytes
+        file_data.read_bytes
       end
 
       context "when file_name IS given (and not empty and is for a valid bmp file)" do
         before_each do
-          file_data.extract_header_data
+          file_data.read_header_data
         end
 
         context "does set expected value for instance variable" do

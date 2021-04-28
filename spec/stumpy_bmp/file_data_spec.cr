@@ -36,47 +36,47 @@ Spectator.describe StumpyBMP::FileData do
       end
     end
 
-    describe "#extract_data" do
+    describe "#read_data" do
       # let(file_data) { StumpyBMP::FileData.new }
 
       before_each do
-        allow(file_data).to receive(:extract_bytes).and_return(nil)
-        allow(file_data).to receive(:extract_header_data).and_return(nil)
+        allow(file_data).to receive(:read_bytes).and_return(nil)
+        allow(file_data).to receive(:read_header_data).and_return(nil)
       end
 
       context "calls" do
-        pending "extract_bytes" do
-          # allow(file_data).to receive(:extract_bytes).and_return(nil)
-          # allow(file_data).to receive(:extract_header_data).and_return(nil)
+        pending "read_bytes" do
+          # allow(file_data).to receive(:read_bytes).and_return(nil)
+          # allow(file_data).to receive(:read_header_data).and_return(nil)
 
-          expect(file_data).to receive(:extract_bytes).and_return(nil)
-          file_data.extract_data
+          expect(file_data).to receive(:read_bytes).and_return(nil)
+          file_data.read_data
         end
 
-        pending "extract_header_data" do
-          # allow(file_data).to receive(:extract_bytes).and_return(nil)
-          # allow(file_data).to receive(:extract_header_data).and_return(nil)
+        pending "read_header_data" do
+          # allow(file_data).to receive(:read_bytes).and_return(nil)
+          # allow(file_data).to receive(:read_header_data).and_return(nil)
 
-          expect(file_data).to receive(:extract_header_data)
-          file_data.extract_data
+          expect(file_data).to receive(:read_header_data)
+          file_data.read_data
         end
       end
     end
 
-    describe "#extract_bytes" do
+    describe "#read_bytes" do
       context "does NOT call" do
         it "File.open" do
           expect(File).not_to receive(:open)
-          file_data.extract_bytes
+          file_data.read_bytes
         end
       end
     end
 
-    describe "#extract_header_data" do
+    describe "#read_header_data" do
       # let(file_data) { StumpyBMP::FileData.new }
 
       before_each do
-        file_data.extract_bytes
+        file_data.read_bytes
       end
 
       context "does NOT set" do
@@ -84,7 +84,7 @@ Spectator.describe StumpyBMP::FileData do
         let(file_ident_header_ords_inited) { Array(UInt8).new }
         it "file_ident_header_ords" do
           expect(file_data.file_ident_header_ords).to eq(file_ident_header_ords_inited)
-          file_data.extract_header_data
+          file_data.read_header_data
           expect(file_data.file_ident_header_ords).to eq(file_ident_header_ords_inited)
         end
       end
