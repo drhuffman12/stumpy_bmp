@@ -370,5 +370,50 @@ Spectator.describe StumpyBMP::FileData do
         end
       end
     end
+
+    describe "#write_data" do
+      let(temp_file_name) { "test_image.bmp" }
+      let(temp_file_path) { File.tempname(temp_file_name) }
+      let(temp_file_data) { StumpyBMP::FileData.new(temp_file_path).tap { |fd| fd.read_data } }
+
+      before_each do
+        file_data.read_data
+        p! temp_file_path
+      end
+
+      after_each do
+        File.delete(temp_file_path) if File.exists?(temp_file_path)
+      end
+
+      it "writes the expected number of bytes" do
+        file_size_written = file_data.write_data(temp_file_path)
+        expect(file_size_written).to eq(file_size_expected)
+      end
+
+      it "written file bytes match the original file bytes" do
+        file_data.write_data(temp_file_path)
+
+        # TODO: Why is the File.read(file_path).size 2 more than the file_bytes.size for example0's image?
+        # TODO: Why is the File.read(file_path).size the same as file_bytes.size for example1's image?
+        # TODO: Why is the File.read(file_path).size the same as file_bytes.size for example2's image?
+        puts
+        puts "v"*40
+        p! file_path
+        puts
+        p! file_data.file_bytes.size
+        puts
+        p! temp_file_data.file_bytes.size
+        puts "."*40
+        f1 = File.read(file_path)
+        p! f1.size
+        puts
+        f2 = File.read(temp_file_path)
+        p! f2.size
+        puts "^"*40
+        puts
+
+        expect(temp_file_data.file_bytes).to eq(file_data.file_bytes)
+      end
+    end
   end
 end

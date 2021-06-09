@@ -117,23 +117,23 @@ module StumpyBMP
     end
 
     def write_data(to_file_path = @file_path)
-      # TODO
       bytes_written = 0
 
       if @file_bytes.size > 0
-        # file_path = File.basename(file_path)
-        # folder_path = file_path[0..file_path.size-1]
-        # file_path = File.join(folder_path, to_file_path)
         folder_path = File.dirname(to_file_path)
-  
+
         file_exists_and_is_writeable = File.directory?(folder_path) && File.file?(to_file_path) && File.writable?(file_path)
         file_not_yet_exists = File.directory?(folder_path) && !File.exists?(to_file_path)
         folder_not_yet_exists = !File.exists?(to_file_path)
-  
+
         if file_exists_and_is_writeable || file_not_yet_exists || folder_not_yet_exists
-          Dir.mkdir(folder_path) if folder_not_yet_exists
+          Dir.mkdir_p(folder_path) if folder_not_yet_exists
           File.open(to_file_path, "w") do |io|
-            bytes_written = io.write_bytes(@file_bytes)
+            # bytes_written = io.write_bytes(@file_bytes.join )
+            @file_bytes.each do |byte|
+              io.write_byte(byte)
+              bytes_written += 1
+            end
           end
         end
       end
@@ -145,7 +145,6 @@ module StumpyBMP
 
     def write_data_bytes
       # @file_bytes = [] of UInt8
-
       # unless @file_path.empty?
       #   file = File.open(@file_path)
 
