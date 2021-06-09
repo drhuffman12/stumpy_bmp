@@ -362,7 +362,12 @@ Spectator.describe StumpyBMP::FileData do
       end
 
       after_each do
-        File.delete(temp_file_path) if File.exists?(temp_file_path)
+        begin
+          # TODO: Find out 'File.delete' of a temp file fails on Windows w/ "Permission denied"
+          File.delete(temp_file_path) if File.exists?(temp_file_path)
+        rescue ex
+          p! ex
+        end
       end
 
       it "writes the expected number of bytes" do
