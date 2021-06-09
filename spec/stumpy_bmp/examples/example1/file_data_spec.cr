@@ -1,10 +1,10 @@
 require "./../../../spec_helper"
 
 Spectator.describe StumpyBMP::FileData do
-  context "when file_name given (and it is a valid bmp file)" do
+  context "when file_path given (and it is a valid bmp file)" do
     # when given a valid bmp file...
-    let(file_name) { "spec/stumpy_bmp/examples/example1/image.bmp" }
-    let(file_data) { StumpyBMP::FileData.new(file_name) }
+    let(file_path) { "spec/stumpy_bmp/examples/example1/image.bmp" }
+    let(file_data) { StumpyBMP::FileData.new(file_path) }
 
     # we expect...
     let(file_size_expected) { 322 }
@@ -96,7 +96,7 @@ Spectator.describe StumpyBMP::FileData do
 
     describe "#initialize" do
       it "does not raise" do
-        expect { StumpyBMP::FileData.new(file_name) }.not_to raise_error
+        expect { StumpyBMP::FileData.new(file_path) }.not_to raise_error
       end
 
       it "is valid" do
@@ -105,8 +105,8 @@ Spectator.describe StumpyBMP::FileData do
       end
 
       context "sets expected values for instance variable" do
-        it "file_name" do
-          expect(file_data.file_name.empty?).to be_false
+        it "file_path" do
+          expect(file_data.file_path.empty?).to be_false
         end
 
         it "file_bytes" do
@@ -116,8 +116,8 @@ Spectator.describe StumpyBMP::FileData do
       end
 
       context "errors do NOT include" do
-        it "file_name" do
-          expect(file_data.errors.keys.to_a).not_to contain(:file_name)
+        it "file_path" do
+          expect(file_data.errors.keys.to_a).not_to contain(:file_path)
         end
       end
 
@@ -158,8 +158,8 @@ Spectator.describe StumpyBMP::FileData do
     describe "#read_bytes" do
       context "does call" do
         pending "File.open" do
-          expect(file_data.file_name.empty?).to be_false
-          expect(File).to receive(:open).with(file_name)
+          expect(file_data.file_path.empty?).to be_false
+          expect(File).to receive(:open).with(file_path)
           file_data.read_bytes
         end
       end
@@ -180,7 +180,7 @@ Spectator.describe StumpyBMP::FileData do
         file_data.read_bytes
       end
 
-      context "when file_name IS given (and not empty and is for a valid bmp file)" do
+      context "when file_path IS given (and not empty and is for a valid bmp file)" do
         before_each do
           file_data.read_header_data
         end

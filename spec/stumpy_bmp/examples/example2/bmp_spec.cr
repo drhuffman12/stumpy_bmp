@@ -3,7 +3,7 @@ require "./../../../spec_helper"
 Spectator.describe StumpyBMP::BMP do
   context "#read" do
     context "spec/stumpy_bmp/examples/example2/image.bmp" do
-      let(bmp) { StumpyBMP::BMP.new(file_name: "spec/stumpy_bmp/examples/example2/image.bmp") }
+      let(bmp) { StumpyBMP::BMP.new(file_path: "spec/stumpy_bmp/examples/example2/image.bmp") }
       before_each { bmp.read }
 
       # NOTE: The rows are encoded bottom to top and left to right

@@ -1,7 +1,7 @@
 require "./../spec_helper"
 
 Spectator.describe StumpyBMP::FileData do
-  context "when no file_name given" do
+  context "when no file_path given" do
     let(file_data) { StumpyBMP::FileData.new }
 
     describe "#initialize" do
@@ -14,8 +14,8 @@ Spectator.describe StumpyBMP::FileData do
       end
 
       context "sets expected values for instance variable" do
-        it "file_name" do
-          expect(file_data.file_name.empty?).to be_true
+        it "file_path" do
+          expect(file_data.file_path.empty?).to be_true
         end
 
         it "file_bytes" do
@@ -24,9 +24,9 @@ Spectator.describe StumpyBMP::FileData do
       end
 
       context "errors include" do
-        it "file_name" do
-          expect(file_data.errors.keys.to_a).to contain(:file_name)
-          expect(file_data.errors[:file_name]).to eq("Param file_name is missing!")
+        it "file_path" do
+          expect(file_data.errors.keys.to_a).to contain(:file_path)
+          expect(file_data.errors[:file_path]).to eq("Param file_path is missing!")
         end
 
         it "file_ident_header_ords" do
@@ -88,6 +88,22 @@ Spectator.describe StumpyBMP::FileData do
           expect(file_data.file_ident_header_ords).to eq(file_ident_header_ords_inited)
         end
       end
+    end
+
+    describe "#write_data" do
+      # let(from_file_path) {}
+      # let(temp_file) { Tempfile.new("test_image.bmp") }
+      # let(temp_file_path) { temp_file.path }
+      # let(temp_file_path) { File.basename(temp_file_path) }
+      # let(temp_folder_path) { File.dirname(temp_file_path) }
+
+      # after_each do
+      #   File.delete(temp_file_path) if File.exists?(temp_file_path)
+      # end
+
+      # it "foo" do
+      #   file_data.write(temp_folder_path, temp_file_path )
+      # end
     end
   end
 end

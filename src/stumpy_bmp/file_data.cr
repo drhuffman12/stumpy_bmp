@@ -1,6 +1,6 @@
 module StumpyBMP
   class FileData
-    property file_name = ""
+    property file_path = ""
     property file_bytes = [] of UInt8
     getter errors = Hash(Symbol, String).new
     getter valid = false
@@ -46,7 +46,7 @@ module StumpyBMP
     IMAGE_COLOR_NUMBERS_RANGE    = (46..49)
     IMAGE_IMPORTANT_COLORS_RANGE = (50..53)
 
-    def initialize(@file_name = "")
+    def initialize(@file_path = "")
       validate
     end
 
@@ -58,8 +58,8 @@ module StumpyBMP
     def read_bytes
       @file_bytes = [] of UInt8
 
-      unless @file_name.empty?
-        file = File.open(@file_name)
+      unless @file_path.empty?
+        file = File.open(@file_path)
 
         # file must be read as UInt8 bytes
         while (c = file.read_byte)
@@ -71,7 +71,7 @@ module StumpyBMP
     end
 
     def read_header_data
-      unless @file_name.empty? || @file_bytes.empty?
+      unless @file_path.empty? || @file_bytes.empty?
         @file_ident_header_ords = file_bytes[FILE_IDENT_HEADER_RANGE]
         @file_size = Utils.long_to_int(file_bytes[FILE_SIZE_RANGE])
         @rs1 = Utils.bit16_to_int(file_bytes[FILE_RS1_RANGE]) # .to_u32
@@ -94,7 +94,7 @@ module StumpyBMP
     def validate
       @errors = Hash(Symbol, String).new
 
-      @errors[:file_name] = "Param file_name is missing!" if file_name.empty?
+      @errors[:file_path] = "Param file_path is missing!" if file_path.empty?
       @errors[:file_ident_header_ords] = "Not a BMP file" if file_ident_header_range_text != FILE_IDENT_HEADER
       @errors[:bits] = "Un-supported bit-depth! (bits: #{bits}; supported: 24 at 8bits per bgr, 32 at 8bits per bgra)" if ![24, 32].includes?(bits)
 
@@ -116,16 +116,56 @@ module StumpyBMP
       raise @errors.to_json if !valid?
     end
 
-    def write_data(canvas)
-      # See also: https://github.com/edin/raytracer/blob/master/ruby/Image.rb and related code
+    def write_data(to_file_path = @file_path)
+      # TODO
+      bytes_written = 0
+
+      if @file_bytes.size > 0
+        # file_path = File.basename(file_path)
+        # folder_path = file_path[0..file_path.size-1]
+        # file_path = File.join(folder_path, to_file_path)
+        folder_path = File.dirname(to_file_path)
+  
+        file_exists_and_is_writeable = File.directory?(folder_path) && File.file?(to_file_path) && File.writable?(file_path)
+        file_not_yet_exists = File.directory?(folder_path) && !File.exists?(to_file_path)
+        folder_not_yet_exists = !File.exists?(to_file_path)
+  
+        if file_exists_and_is_writeable || file_not_yet_exists || folder_not_yet_exists
+          Dir.mkdir(folder_path) if folder_not_yet_exists
+          File.open(to_file_path, "w") do |io|
+            bytes_written = io.write_bytes(@file_bytes)
+          end
+        end
+      end
+
+      bytes_written
+      # (canvas)
+      # # See also: https://github.com/edin/raytracer/blob/master/ruby/Image.rb and related code
     end
 
     def write_data_bytes
+      # @file_bytes = [] of UInt8
+
+      # unless @file_path.empty?
+      #   file = File.open(@file_path)
+
+      #   # file must be read as UInt8 bytes
+      #   while (c = file.read_byte)
+      #     @file_bytes << c
+      #   end
+      # end
+
+      # @file_bytes
+
       # TODO
+      # Utils.to_u8_bounded(x)
+      # Utils.to_u16_bounded(x)
+      # Utils.to_u32_bounded(x)
+
+      # file
     end
 
     def write_data_header
-      # TODO
     end
 
     def write_data_image
