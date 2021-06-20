@@ -30,9 +30,9 @@ module StumpyBMP
 
       bytes_per_pixel = (@file_data.bits / 8)
 
+      # As per https://en.wikipedia.org/wiki/BMP_file_format#Pixel_storage:
+      #   'Each row in the Pixel array is padded to a multiple of 4 bytes in size'
       row_size_with_padding = ((bytes_per_pixel * @file_data.width / 4.0).ceil * 4.0).to_i32
-      # row_size_with_no_padding = (bytes_per_pixel * @file_data.width).to_i32
-      # padding = row_size_with_padding - row_size_with_no_padding
 
       byte_index = @file_data.offset.to_i32
 

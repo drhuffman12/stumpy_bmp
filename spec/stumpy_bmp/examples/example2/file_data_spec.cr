@@ -378,25 +378,8 @@ Spectator.describe StumpyBMP::FileData do
       it "written file bytes match the original file bytes" do
         file_data.write_data(temp_file_path)
 
-        # TODO: Why is the File.read(file_path).size 2 more than the file_bytes.size for example0's image?
-        # TODO: Why is the File.read(file_path).size the same as file_bytes.size for example1's image?
-        # TODO: Why is the File.read(file_path).size the same as file_bytes.size for example2's image?
-        puts
-        puts "v"*40
-        p! file_path
-        puts
-        p! file_data.file_bytes.size
-        puts
-        p! temp_file_data.file_bytes.size
-        puts "."*40
-        f1 = File.read(file_path)
-        p! f1.size
-        puts
-        f2 = File.read(temp_file_path)
-        p! f2.size
-        puts "^"*40
-        puts
-
+        # NOTE: 'Each row in the Pixel array is padded to a multiple of 4 bytes in size'
+        #   So, 'file.size' and 'file_data.file_bytes.size might vary'.
         expect(temp_file_data.file_bytes).to eq(file_data.file_bytes)
       end
     end
