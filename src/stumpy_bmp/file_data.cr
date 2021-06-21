@@ -50,46 +50,50 @@ module StumpyBMP
       validate
     end
 
-    def read_data
-      read_bytes
-      read_header_data
-    end
+    # def initialize # (@file_path = "")
+    #   validate
+    # end
 
-    def read_bytes
-      @file_bytes = [] of UInt8
+    # def read_data
+    #   read_bytes
+    #   read_header_data
+    # end
 
-      unless @file_path.empty?
-        file = File.open(@file_path)
+    # def read_bytes
+    #   @file_bytes = [] of UInt8
 
-        # file must be read as UInt8 bytes
-        while (c = file.read_byte)
-          @file_bytes << c
-        end
-      end
+    #   unless @file_path.empty?
+    #     file = File.open(@file_path)
 
-      @file_bytes
-    end
+    #     # file must be read as UInt8 bytes
+    #     while (c = file.read_byte)
+    #       @file_bytes << c
+    #     end
+    #   end
 
-    def read_header_data
-      unless @file_path.empty? || @file_bytes.empty?
-        @file_ident_header_ords = file_bytes[FILE_IDENT_HEADER_RANGE]
-        @file_size = Utils.long_to_int(file_bytes[FILE_SIZE_RANGE])
-        @rs1 = Utils.bit16_to_int(file_bytes[FILE_RS1_RANGE]) # .to_u32
-        @rs2 = Utils.bit16_to_int(file_bytes[FILE_RS2_RANGE]) # .to_u32
-        @offset = Utils.long_to_int(file_bytes[FILE_OFFSET_RANGE])
-        @header_size = Utils.long_to_int(file_bytes[IMAGE_HEADER_SIZE_RANGE])
-        @width = Utils.long_to_int(file_bytes[IMAGE_WIDTH_RANGE])
-        @height = Utils.long_to_int(file_bytes[IMAGE_HEIGHT_RANGE])
-        @color_planes = Utils.bit16_to_int(file_bytes[IMAGE_COLOR_PLANES_RANGE]) # .to_u32
-        @bits = Utils.bit16_to_int(file_bytes[IMAGE_BITS_RANGE])                 # .to_u32
-        @compression = Utils.long_to_int(file_bytes[IMAGE_COMPRESSION_RANGE])
-        @image_size = Utils.long_to_int(file_bytes[IMAGE_SIZE_RANGE])
-        @res_x = Utils.long_to_int(file_bytes[IMAGE_RESOLUTION_X_RANGE])
-        @res_y = Utils.long_to_int(file_bytes[IMAGE_RESOLUTION_Y_RANGE])
-        @color_numbers = Utils.long_to_int(file_bytes[IMAGE_COLOR_NUMBERS_RANGE])
-        @important_colors = Utils.long_to_int(file_bytes[IMAGE_IMPORTANT_COLORS_RANGE])
-      end
-    end
+    #   @file_bytes
+    # end
+
+    # def read_header_data
+    #   unless @file_path.empty? || @file_bytes.empty?
+    #     @file_ident_header_ords = file_bytes[FILE_IDENT_HEADER_RANGE]
+    #     @file_size = Utils.long_to_int(file_bytes[FILE_SIZE_RANGE])
+    #     @rs1 = Utils.bit16_to_int(file_bytes[FILE_RS1_RANGE]) # .to_u32
+    #     @rs2 = Utils.bit16_to_int(file_bytes[FILE_RS2_RANGE]) # .to_u32
+    #     @offset = Utils.long_to_int(file_bytes[FILE_OFFSET_RANGE])
+    #     @header_size = Utils.long_to_int(file_bytes[IMAGE_HEADER_SIZE_RANGE])
+    #     @width = Utils.long_to_int(file_bytes[IMAGE_WIDTH_RANGE])
+    #     @height = Utils.long_to_int(file_bytes[IMAGE_HEIGHT_RANGE])
+    #     @color_planes = Utils.bit16_to_int(file_bytes[IMAGE_COLOR_PLANES_RANGE]) # .to_u32
+    #     @bits = Utils.bit16_to_int(file_bytes[IMAGE_BITS_RANGE])                 # .to_u32
+    #     @compression = Utils.long_to_int(file_bytes[IMAGE_COMPRESSION_RANGE])
+    #     @image_size = Utils.long_to_int(file_bytes[IMAGE_SIZE_RANGE])
+    #     @res_x = Utils.long_to_int(file_bytes[IMAGE_RESOLUTION_X_RANGE])
+    #     @res_y = Utils.long_to_int(file_bytes[IMAGE_RESOLUTION_Y_RANGE])
+    #     @color_numbers = Utils.long_to_int(file_bytes[IMAGE_COLOR_NUMBERS_RANGE])
+    #     @important_colors = Utils.long_to_int(file_bytes[IMAGE_IMPORTANT_COLORS_RANGE])
+    #   end
+    # end
 
     def validate
       @errors = Hash(Symbol, String).new
@@ -103,10 +107,6 @@ module StumpyBMP
       @errors
     end
 
-    def file_ident_header_range_text
-      @file_ident_header_ords.map(&.chr).join
-    end
-
     def valid?
       validate
       @valid = @errors.keys.empty?
@@ -116,59 +116,63 @@ module StumpyBMP
       raise @errors.to_json if !valid?
     end
 
-    def write_data(to_file_path = @file_path)
-      bytes_written = 0
-
-      if @file_bytes.size > 0
-        folder_path = File.dirname(to_file_path)
-
-        file_exists_and_is_writeable = File.directory?(folder_path) && File.file?(to_file_path) && File.writable?(file_path)
-        file_not_yet_exists = File.directory?(folder_path) && !File.exists?(to_file_path)
-        folder_not_yet_exists = !File.exists?(to_file_path)
-
-        if file_exists_and_is_writeable || file_not_yet_exists || folder_not_yet_exists
-          Dir.mkdir_p(folder_path) if folder_not_yet_exists
-          File.open(to_file_path, "w") do |io|
-            # bytes_written = io.write_bytes(@file_bytes.join )
-            @file_bytes.each do |byte|
-              io.write_byte(byte)
-              bytes_written += 1
-            end
-          end
-        end
-      end
-
-      bytes_written
-      # (canvas)
-      # # See also: https://github.com/edin/raytracer/blob/master/ruby/Image.rb and related code
+    def file_ident_header_range_text
+      @file_ident_header_ords.map(&.chr).join
     end
 
-    def write_data_bytes
-      # @file_bytes = [] of UInt8
-      # unless @file_path.empty?
-      #   file = File.open(@file_path)
+    # def write_data(to_file_path = @file_path)
+    #   bytes_written = 0
 
-      #   # file must be read as UInt8 bytes
-      #   while (c = file.read_byte)
-      #     @file_bytes << c
-      #   end
-      # end
+    #   if @file_bytes.size > 0
+    #     folder_path = File.dirname(to_file_path)
 
-      # @file_bytes
+    #     file_exists_and_is_writeable = File.directory?(folder_path) && File.file?(to_file_path) && File.writable?(file_path)
+    #     file_not_yet_exists = File.directory?(folder_path) && !File.exists?(to_file_path)
+    #     folder_not_yet_exists = !File.exists?(to_file_path)
 
-      # TODO
-      # Utils.to_u8_bounded(x)
-      # Utils.to_u16_bounded(x)
-      # Utils.to_u32_bounded(x)
+    #     if file_exists_and_is_writeable || file_not_yet_exists || folder_not_yet_exists
+    #       Dir.mkdir_p(folder_path) if folder_not_yet_exists
+    #       File.open(to_file_path, "w") do |io|
+    #         # bytes_written = io.write_bytes(@file_bytes.join )
+    #         @file_bytes.each do |byte|
+    #           io.write_byte(byte)
+    #           bytes_written += 1
+    #         end
+    #       end
+    #     end
+    #   end
 
-      # file
-    end
+    #   bytes_written
+    #   # (canvas)
+    #   # # See also: https://github.com/edin/raytracer/blob/master/ruby/Image.rb and related code
+    # end
 
-    def write_data_header
-    end
+    # def write_data_bytes
+    #   # @file_bytes = [] of UInt8
+    #   # unless @file_path.empty?
+    #   #   file = File.open(@file_path)
 
-    def write_data_image
-      # TODO
-    end
+    #   #   # file must be read as UInt8 bytes
+    #   #   while (c = file.read_byte)
+    #   #     @file_bytes << c
+    #   #   end
+    #   # end
+
+    #   # @file_bytes
+
+    #   # TODO
+    #   # Utils.to_u8_bounded(x)
+    #   # Utils.to_u16_bounded(x)
+    #   # Utils.to_u32_bounded(x)
+
+    #   # file
+    # end
+
+    # def write_data_header
+    # end
+
+    # def write_data_image
+    #   # TODO
+    # end
   end
 end
