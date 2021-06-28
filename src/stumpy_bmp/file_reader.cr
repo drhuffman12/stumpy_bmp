@@ -1,6 +1,8 @@
 require "./file_data.cr"
 
 module StumpyBMP
+  class FileReadError < Exception; end
+
   class FileReader
     # include FileData
     getter file_data : FileData
@@ -11,11 +13,10 @@ module StumpyBMP
     # getter valid = false
     getter file_read = false
 
-    # # property file_path = ""
+    # property file_path = ""
     # property file_bytes = [] of UInt8
 
-    def initialize(file_data : FileData) # , @file_path = "")
-      @file_data = file_data             # .clone
+    def initialize(@file_data : FileData) # , @file_path : String)
       validate
     end
 
@@ -34,7 +35,7 @@ module StumpyBMP
     end
 
     def validate!
-      raise @file_data.errors.to_json if !valid?
+      raise FileReadError.new(@file_data.errors.to_json) if !valid?
     end
 
     def read
@@ -49,7 +50,7 @@ module StumpyBMP
 
       validate!
 
-      {file_data: @file_data, canvas: to_canvas}
+      # {file_data: @file_data, canvas: to_canvas}
     end
 
     # private
@@ -94,55 +95,55 @@ module StumpyBMP
     #   @file_ident_header_ords.map(&.chr).join
     # end
 
-    # private def file_data_to_canvas
-    private def to_canvas
-      canvas = StumpyCore::Canvas.new(@file_data.width.to_i32, @file_data.height.to_i32)
+    # # private def file_data_to_canvas
+    # private def to_canvas
+    #   canvas = StumpyCore::Canvas.new(@file_data.width.to_i32, @file_data.height.to_i32)
 
-      bytes_per_pixel = (@file_data.bits / 8)
+    #   bytes_per_pixel = (@file_data.bits / 8)
 
-      # As per https://en.wikipedia.org/wiki/BMP_file_format#Pixel_storage:
-      #   'Each row in the Pixel array is padded to a multiple of 4 bytes in size'
-      row_size_with_padding = ((bytes_per_pixel * @file_data.width / 4.0).ceil * 4.0).to_i32
+    #   # As per https://en.wikipedia.org/wiki/BMP_file_format#Pixel_storage:
+    #   #   'Each row in the Pixel array is padded to a multiple of 4 bytes in size'
+    #   row_size_with_padding = ((bytes_per_pixel * @file_data.width / 4.0).ceil * 4.0).to_i32
 
-      byte_index = @file_data.offset.to_i32
+    #   byte_index = @file_data.offset.to_i32
 
-      @file_data.height.times do |y|
-        row_range = (byte_index..(byte_index + row_size_with_padding - 1))
+    #   @file_data.height.times do |y|
+    #     row_range = (byte_index..(byte_index + row_size_with_padding - 1))
 
-        # TODO: Handle less than one byte per color for now, we assume (and force) bytes_per_pixel to be a whole number
-        pixel_byte_sets = row_range.to_a.each_slice(bytes_per_pixel.to_i32).to_a
+    #     # TODO: Handle less than one byte per color for now, we assume (and force) bytes_per_pixel to be a whole number
+    #     pixel_byte_sets = row_range.to_a.each_slice(bytes_per_pixel.to_i32).to_a
 
-        @file_data.width.times do |x|
-          pixel_color_data = pixel_byte_sets[x]
-          pixel_data_to_canvas(pixel_color_data, x, y, canvas)
-        end
+    #     @file_data.width.times do |x|
+    #       pixel_color_data = pixel_byte_sets[x]
+    #       pixel_data_to_canvas(pixel_color_data, x, y, canvas)
+    #     end
 
-        byte_index += row_size_with_padding
-      end
+    #     byte_index += row_size_with_padding
+    #   end
 
-      canvas
-    end
+    #   canvas
+    # end
 
-    private def pixel_data_to_canvas(pixel_color_data, x, y, canvas)
-      case
-      when @file_data.bits == 32
-        bi, gi, ri, ai = pixel_color_data
-        a = @file_data.file_bytes[ai]
-        r = @file_data.file_bytes[ri]
-        g = @file_data.file_bytes[gi]
-        b = @file_data.file_bytes[bi]
+    # private def pixel_data_to_canvas(pixel_color_data, x, y, canvas)
+    #   case
+    #   when @file_data.bits == 32
+    #     bi, gi, ri, ai = pixel_color_data
+    #     a = @file_data.file_bytes[ai]
+    #     r = @file_data.file_bytes[ri]
+    #     g = @file_data.file_bytes[gi]
+    #     b = @file_data.file_bytes[bi]
 
-        canvas.safe_set(x.to_i32, y.to_i32, StumpyCore::RGBA.from_rgba(r, g, b, a))
-      when @file_data.bits == 24
-        bi, gi, ri = pixel_color_data
-        r = @file_data.file_bytes[ri]
-        g = @file_data.file_bytes[gi]
-        b = @file_data.file_bytes[bi]
+    #     canvas.safe_set(x.to_i32, y.to_i32, StumpyCore::RGBA.from_rgba(r, g, b, a))
+    #   when @file_data.bits == 24
+    #     bi, gi, ri = pixel_color_data
+    #     r = @file_data.file_bytes[ri]
+    #     g = @file_data.file_bytes[gi]
+    #     b = @file_data.file_bytes[bi]
 
-        canvas.safe_set(x.to_i32, y.to_i32, StumpyCore::RGBA.from_rgb8(r, g, b))
-      else
-        # TODO: Handle less than one byte per colorl for now, we assume (and force) bytes_per_pixel to be a whole number
-      end
-    end
+    #     canvas.safe_set(x.to_i32, y.to_i32, StumpyCore::RGBA.from_rgb8(r, g, b))
+    #   else
+    #     # TODO: Handle less than one byte per colorl for now, we assume (and force) bytes_per_pixel to be a whole number
+    #   end
+    # end
   end
 end

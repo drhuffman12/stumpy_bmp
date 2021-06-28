@@ -65,7 +65,7 @@ Spectator.describe StumpyBMP::FileReader do
 
       it "is valid" do
         # because at initialization, we have not *yet* read the file data
-        expect(file_data.valid?).to be_false
+        expect(file_reader.valid?).to be_false
       end
 
       context "sets expected values for instance variable" do
@@ -128,13 +128,13 @@ Spectator.describe StumpyBMP::FileReader do
         end
       end
 
-      it "sets @file_bytes with expected (mock) data" do
+      it "sets @file_bytes with expected data" do
         expect(file_reader.file_data.file_bytes).to eq(Array(UInt8).new)
         file_reader.read_bytes
         expect(file_reader.file_data.file_bytes).to eq(file_bytes_expected)
       end
 
-      it "returns expected (mock) data" do
+      it "returns expected data" do
         expect(file_reader.read_bytes).to eq(file_bytes_expected)
       end
     end
@@ -334,38 +334,5 @@ Spectator.describe StumpyBMP::FileReader do
         end
       end
     end
-
-    # describe "#write_data" do
-    #   let(temp_file_name) { "test_image.bmp" }
-    #   let(temp_file_path) { File.tempname(temp_file_name) }
-    #   let(temp_file_data) { StumpyBMP::FileData.new(temp_file_path).tap { |fd| fd.read_data } }
-
-    #   before_each do
-    #     file_data.read_data
-    #     p! temp_file_path
-    #   end
-
-    #   after_each do
-    #     begin
-    #       # TODO: Find out 'File.delete' of a temp file fails on Windows w/ "Permission denied"
-    #       File.delete(temp_file_path) if File.exists?(temp_file_path)
-    #     rescue ex
-    #       p! ex
-    #     end
-    #   end
-
-    #   it "writes the expected number of bytes" do
-    #     file_size_written = file_data.write_data(temp_file_path)
-    #     expect(file_size_written).to eq(file_size_expected)
-    #   end
-
-    #   it "written file bytes match the original file bytes" do
-    #     file_data.write_data(temp_file_path)
-
-    #     # NOTE: 'Each row in the Pixel array is padded to a multiple of 4 bytes in size'
-    #     #   So, 'file.size' and 'file_data.file_bytes.size might vary'.
-    #     expect(temp_file_data.file_bytes).to eq(file_data.file_bytes)
-    #   end
-    # end
   end
 end

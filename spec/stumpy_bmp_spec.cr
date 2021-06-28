@@ -14,7 +14,7 @@ Spectator.describe StumpyBMP do
     end
 
     context "returns" do
-      let(stumpy_bmp_canvas) { StumpyBMP.read(file_path: file_path) }
+      let(stumpy_bmp_canvas) { StumpyBMP.read(file_path) }
       it "a Canvas" do
         expect(stumpy_bmp_canvas.class).to eq(StumpyCore::Canvas)
       end
